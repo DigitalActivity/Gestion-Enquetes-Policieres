@@ -1,0 +1,9 @@
+diff a/GestionEnquetes/GestionEnquetes/Rapport/DlgRapportAccident.Designer.cs b/GestionEnquetes/GestionEnquetes/Rapport/DlgRapportAccident.Designer.cs	(rejected hunks)
+@@ -40,6 +40,7 @@
+             this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
+             this.labelRemarques = new System.Windows.Forms.Label();
+             this.textBox1 = new System.Windows.Forms.TextBox();
++<<<<<<< HEAD
+             this.dataGridViewVehiculesInclusDansRapport = new System.Windows.Forms.DataGridView();
+             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();

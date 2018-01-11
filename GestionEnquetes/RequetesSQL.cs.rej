@@ -1,0 +1,439 @@
+diff a/GestionEnquetes/GestionEnquetes/RequetesSQL.cs b/GestionEnquetes/GestionEnquetes/RequetesSQL.cs	(rejected hunks)
+@@ -79,15 +79,16 @@
+                         "FROM Compte " +
+                         "WHERE matricule=?", p_matricule))
+                 {
+-                if (!bdr.Read() /*&& !bdr.IsDBNull(1) */)
+-                    return null;
++                    if (!bdr.Read() /*&& !bdr.IsDBNull(1) */)
++                        return null;
+ 
+-                compte = new Compte(bdr.GetString(1), bdr.GetString(2), bdr.GetInt32(0).ToString(), bdr.GetDateTime(5),
+-                                new Adresse(bdr.GetString(8), bdr.GetString(9), bdr.GetString(10), bdr.GetString(11), bdr.GetString(12)), 
+-                                bdr.GetString(6), bdr.GetString(7), (Grade)Enum.Parse(typeof(Grade), bdr.GetString(3)), bdr.GetString(4));
++                    compte = new Compte(bdr.GetString(1), bdr.GetString(2), bdr.GetInt32(0).ToString(), bdr.GetDateTime(5),
++                                    new Adresse(bdr.GetString(8), bdr.GetString(9), bdr.GetString(10), bdr.GetString(11), bdr.GetString(12)),
++                                    bdr.GetString(6), bdr.GetString(7), (Grade)Enum.Parse(typeof(Grade), bdr.GetString(3)), bdr.GetString(4));
+                 }
+             }
+-            catch (Exception e) {
++            catch (Exception e)
++            {
+                 MB.Avertir(e.Message);
+             }
+             return compte;
+@@ -115,7 +116,7 @@
+         public static Compte SQLLogin(string p_matricule, string p_textPasse)
+         {
+             Compte compte = SQLLireCompte(p_matricule);
+-            if(compte == null)
++            if (compte == null)
+                 return null;
+             string hp = compte.HashPass;
+             if (compte.Matricule.Equals(p_matricule) &&
+@@ -208,5 +209,405 @@
+             }
+             catch { }
+         }
++
++        public static string SQLGetCodeStatutAvecNoDossier(string p_noDossier)
++        {
++            string code = "";
++
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT code_statut " +
++                        "FROM Statut " +
++                        "WHERE no_dossier=?", p_noDossier))
++                {
++                    if (bdr.Read() /*&& !bdr.IsDBNull(1) */)
++                        code = bdr.GetString(0);
++                }
++            }
++            catch { }
++            return code;
++        }
++
++        public static string SQLGetMatriculePolicierAvecNumero(string p_noDossier)
++        {
++            string matricule = "";
++
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT matricule_policier " +
++                        "FROM Statut " +
++                        "WHERE no_dossier=?", p_noDossier))
++                {
++                    if (bdr.Read() /*&& !bdr.IsDBNull(1) */)
++                        matricule = bdr.GetString(0);
++                }
++            }
++            catch { }
++            return matricule;
++        }
++
++        public static Dossier SQLChercherDossierParNumero(string p_noDossier)
++        {
++            Dossier dossier = null;
++            Statut statut;
++            List<Vehicule> listeVehicule = new List<Vehicule>();
++            List<Personne> listePersonne = new List<Personne>();
++            RapportAccident rapportAccident;
++            RapportEnquete rapportEnquete;
++            RapportEvenement rapportEvenement;
++            Destination destination;
++
++            foreach (int i in SQLChercherNoPersonneAvecNoDossier(p_noDossier))
++            {
++                listePersonne.Add(SQLChercherPersonneAvecNoPersonne(i));
++            }
++
++            foreach (int i in SQLChercherNoVehiculeAvecNoDossier(p_noDossier))
++            {
++                listeVehicule.Add(SQLChercherVehiculeAvecNoVehicule(i));
++            }
++
++            statut = ChercherStatutAvecNoDossier(p_noDossier);
++            rapportAccident = SQLChercherRapportAccidentAvecNoDossier(p_noDossier);
++            rapportEnquete = SQLChercherRapportEnqueteAvecNoDossier(p_noDossier);
++            rapportEvenement = SQLChercherRapportEvenementAvecNoDosser(p_noDossier);
++            destination = SQLChercherDestinationAvecNoDossier(p_noDossier);
++
++            dossier = new Dossier(p_noDossier, statut, rapportAccident, rapportEvenement,
++                rapportEnquete, destination, listeVehicule, listePersonne);
++
++            return dossier;
++        }
++
++        public static List<int> SQLChercherNoPersonneAvecNoDossier(string p_noDossier)
++        {
++            List<int> numeros = new List<int>();
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT no_personne " +
++                        "FROM Personne_Dossier" +
++                        "WHERE no_dossier=?", p_noDossier))
++                {
++                    while (bdr.Read())
++                    {
++                        numeros.Add(bdr.GetInt32(0));
++                    }
++
++                }
++            }
++            catch (Exception e)
++            {
++                MB.Avertir(e.Message);
++            }
++
++            return numeros;
++        }
++
++        public static Personne SQLChercherPersonneAvecNoPersonne(int p_noPersonne)
++        {
++            Personne personne = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT nom, prénom, date_naissance, " +
++                        "adresse, code_personne, no_vehicule " +
++                        "FROM Personne" +
++                        "WHERE numéro_personne=?", p_noPersonne))
++                {
++                    if (bdr.Read())
++                    {
++                        CodePersonne code;
++                        Enum.TryParse(bdr.GetString(4), out code);
++
++                        personne = new Personne(p_noPersonne, bdr.GetString(0), bdr.GetString(1), bdr.GetDateTime(2), bdr.GetString(3), code);
++                    }
++                }
++            }
++            catch { }
++
++            return personne;
++        }
++
++        public static List<int> SQLChercherNoVehiculeAvecNoDossier(string p_noDossier)
++        {
++            List<int> numeros = new List<int>();
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT no_véhicule " +
++                        "FROM Vehicule_Dossier" +
++                        "WHERE no_dossier=?", p_noDossier))
++                {
++                    while (bdr.Read())
++                    {
++                        numeros.Add(bdr.GetInt32(0));
++                    }
++
++                }
++            }
++            catch (Exception e)
++            {
++                MB.Avertir(e.Message);
++            }
++
++            return numeros;
++        }
++
++        public static Vehicule SQLChercherVehiculeAvecNoVehicule(int p_noVehicule)
++        {
++            Vehicule Vehicule = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT marque, modèle, année, " +
++                        "statut_véhicule, numéro_personne " +
++                        "FROM Vehicule" +
++                        "WHERE no_véhicule=?", p_noVehicule))
++                {
++                    if (bdr.Read())
++                    {
++                        CodeVehicule code;
++                        Enum.TryParse(bdr.GetString(4), out code);
++                        Personne personne = SQLChercherPersonneAvecNoPersonne(bdr.GetInt32(4));
++                        Vehicule = new Vehicule(p_noVehicule, bdr.GetString(0), bdr.GetString(1), bdr.GetInt32(2), code, personne);
++                    }
++                }
++            }
++            catch { }
++
++            return Vehicule;
++        }
++
++        public static Statut ChercherStatutAvecNoDossier(string p_noDossier)
++        {
++            Statut statut = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT date_heure_statut, code_statut, matricule_policier " +
++                        "FROM Statut" +
++                        "WHERE no_dossier=?", p_noDossier))
++                {
++                    if (bdr.Read())
++                    {
++                        CodeStatut code;
++                        Enum.TryParse(bdr.GetString(1), out code);
++                        statut = new Statut(p_noDossier, bdr.GetDateTime(0), code, bdr.GetString(2));
++                    }
++                }
++            }
++            catch { }
++
++            return statut;
++        }
++
++        public static RapportAccident SQLChercherRapportAccidentAvecNoDossier(string p_noDossier)
++        {
++            RapportAccident rapportAccident = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT no_rapport_accident, adresse, date_heure, remarque " +
++                        "FROM Rapport_Accident" +
++                        "WHERE no_dossier=?", p_noDossier))
++                {
++                    if (bdr.Read())
++                    {
++                        // rapportAccident = new RapportAccident(bdr.GetInt32(0),p_noDossier, bdr.GetString(1), bdr.GetDateTime(2), bdr.GetString(3));
++                    }
++                }
++            }
++            catch { }
++
++            return rapportAccident;
++        }
++
++        public static RapportEnquete SQLChercherRapportEnqueteAvecNoDossier(string p_noDossier)
++        {
++            RapportEnquete rapportEnquete = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT remarque, matricule_policier " +
++                        "FROM Rapport_Enquete" +
++                        "WHERE no_dossier=?", p_noDossier))
++                {
++                    if (bdr.Read())
++                    {
++                        Compte compte = SQLChercherCompteAvecMatricule(bdr.GetString(1));
++                        rapportEnquete = new RapportEnquete(compte, bdr.GetString(0));
++                    }
++                }
++            }
++            catch { }
++
++            return rapportEnquete;
++        }
++
++        public static Compte SQLChercherCompteAvecMatricule(string p_matricule)
++        {
++            Compte compte = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                        "SELECT prénom, nom, grade, mot_de_passe, date_naissance, " +
++                        "telephone, email, adr_rue, adr_ville, adr_etat, adr_zip, adr_pays " +
++                        "FROM Compte" +
++                        "WHERE matricule=?", p_matricule))
++                {
++                    if (bdr.Read())
++                    {
++
++                        Grade grade;
++                        Enum.TryParse(bdr.GetString(1), out grade);
++                        Adresse adresse = new Adresse(bdr.GetString(7), bdr.GetString(8), bdr.GetString(9), bdr.GetString(10), bdr.GetString(11));
++                        compte = new Compte(bdr.GetString(0), bdr.GetString(1), p_matricule, bdr.GetDateTime(4), adresse, bdr.GetString(5), bdr.GetString(6), grade, bdr.GetString(3));
++                    }
++                }
++            }
++            catch { }
++
++            return compte;
++        }
++
++        public static RapportEvenement SQLChercherRapportEvenementAvecNoDosser(string p_noDossier)
++        {
++            RapportEvenement rapportEvenement = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                    "SELECT code_nature, adr_rue, adr_ville, adr_etat, adr_zip, adr_pays, date_heure_rapport, remarques " +
++                    "FROM Rapport_Evenement" +
++                    "WHERE no_dossier=?", p_noDossier))
++                {
++                    if (bdr.Read())
++                    {
++                        CodeDeNature code = RapportEvenement.getCodeNature(bdr.GetInt32(0));
++                        Adresse adresse = new Adresse(bdr.GetString(1), bdr.GetString(2), bdr.GetString(3), bdr.GetString(4), bdr.GetString(5));
++                        //rapportEvenement = new RapportEvenement(code, bdr.GetDateTime(6),adresse,bdr.GetString(7));
++                    }
++                }
++            }
++            catch { }
++
++            return rapportEvenement;
++        }
++
++        public static Destination SQLChercherDestinationAvecNoDossier(string p_noDossier)
++        {
++            Destination destination = null;
++            try
++            {
++                using (BdReader bdr = new BdReader(m_bd,
++                    "SELECT date_heure, code_destination, remarques, matricule_policier " +
++                    "FROM Destination" +
++                    "WHERE no_dossier=?", p_noDossier))
++                {
++                    if (bdr.Read())
++                    {
++                        CodeDestination code;
++                        Enum.TryParse(bdr.GetString(1), out code);
++
++                        destination = new Destination(bdr.GetDateTime(0), code, bdr.GetString(2), p_noDossier, bdr.GetInt32(3));
++                    }
++                }
++            }
++            catch { }
++
++            return destination;
++        }
++
++
++        public static void SQLEnregistrerDossier(Dossier p_dossier)
++        {
++            SQLEnregistrerNoDossier(p_dossier.Numero);
++            foreach(Personne personne in p_dossier.Personnes)
++            {
++                SQLEnregistrerPersonne(personne, p_dossier.Numero);
++            }
++            foreach(Vehicule vehicule in p_dossier.Vehicules)
++            {
++                SQLEnregistrerVehicule(vehicule, p_dossier.Numero);
++            }
++
++            // TODO : finir les requetes d'enregistrement de dossiers.
++
++        }
++
++        public static bool SQLEnregistrerNoDossier(string p_numéro)
++        {
++            try
++            {
++                BdNonQuery insert = new BdNonQuery(m_bd,
++                "INSERT INTO Dossier(no_dossier) " +
++                "VALUES(?)",
++                p_numéro);
++
++                insert.ExecuteNonQuery();
++            }
++            catch { return false; }
++            return true;
++        }
++
++        public static bool SQLEnregistrerPersonne(Personne p_personne, string p_noDossier)
++        {
++            try
++            {
++                BdNonQuery insert = new BdNonQuery(m_bd,
++                "INSERT INTO Personne(numéro_personne, nom, prénom, date_naissance, adresse, code_personne) " +
++                "VALUES(?,?,?,?,?,?)",
++                p_personne.Numero, p_personne.Nom, p_personne.Prenom, p_personne.DateNaissance, p_personne.Adresse, p_personne.CodePersonne.ToString());
++
++                insert.ExecuteNonQuery();
++
++                insert = new BdNonQuery(m_bd,
++                "INSERT INTO Personne_dossier(no_personne, no_dossier) " +
++                "VALUES(?,?)",
++                p_personne.Numero, p_noDossier);
++
++                insert.ExecuteNonQuery();
++
++            }
++            catch {
++                //TODO :  chercher si la personne a été entrée si oui la delete.
++
++                return false; }
++            return true;
++        }
++
++        public static bool SQLEnregistrerVehicule(Vehicule p_vehicule, string p_noDossier)
++        {
++            try
++            {
++                BdNonQuery insert = new BdNonQuery(m_bd,
++                "INSERT INTO Vehicule(no_véhicule, marque, modèle, année, statut_véhicule, numéro_personne) " +
++                "VALUES(?,?,?,?,?,?)",
++                p_vehicule.NoVehicule, p_vehicule.Marque, p_vehicule.Modele, p_vehicule.Annee, p_vehicule.CodeVehicule.ToString(), p_vehicule.Proprietaire.Numero);
++
++                insert.ExecuteNonQuery();
++
++                insert = new BdNonQuery(m_bd,
++                "INSERT INTO Vehicule_Dossier(no_dossier, no_véhicule) " +
++                "VALUES(?,?)",
++                p_noDossier, p_vehicule.NoVehicule);
++
++                insert.ExecuteNonQuery();
++
++            }
++            catch
++            {
++                //TODO :  chercher si le véhicule a été entrée si oui le delete.
++
++                return false;
++            }
++            return true;
++        }
++
++
++        // TODO : finir les requetes d'enregistrement de dossiers.
++
+     }
+ }

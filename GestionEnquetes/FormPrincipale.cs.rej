@@ -1,0 +1,10 @@
+diff a/GestionEnquetes/GestionEnquetes/FormPrincipale.cs b/GestionEnquetes/GestionEnquetes/FormPrincipale.cs	(rejected hunks)
+@@ -53,7 +53,7 @@
+             => new DlgLogin().ShowDialog();
+ 
+         private void ajouterToolStripMenuItem1_Click(object sender, EventArgs e)
+-            => new DlgAjoutDossier().ShowDialog();
++            => new DlgAjoutDossier(TypeDeSaisie.Ajout, null).ShowDialog();
+ 
+         private void FormPrincipale_FormClosed(object sender, FormClosedEventArgs e)
+             => Document.Instance.Fermer();

@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5262CB53-FE66-49DE-91CA-3B866C94239A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GestionEnquetes</RootNamespace>
+    <AssemblyName>GestionEnquetes</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>1</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>1</WarningLevel>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UtilStJ">
+      <HintPath>.\UtilStJ.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Compte\Compte.cs" />
+    <Compile Include="Compte\DlgChoisirCompte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compte\DlgChoisirCompte.Designer.cs">
+      <DependentUpon>DlgChoisirCompte.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compte\DlgCompte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compte\DlgCompte.designer.cs">
+      <DependentUpon>DlgCompte.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compte\DlgLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compte\DlgLogin.designer.cs">
+      <DependentUpon>DlgLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compte\DlgReset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compte\DlgReset.designer.cs">
+      <DependentUpon>DlgReset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compte\DlgSaisieCompte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compte\DlgSaisieCompte.designer.cs">
+      <DependentUpon>DlgSaisieCompte.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compte\Hashage.cs" />
+    <Compile Include="Compte\LoggedUser.cs" />
+    <Compile Include="Compte\Utilitaires.cs" />
+    <Compile Include="Document.cs" />
+    <Compile Include="Dossier\Destination.cs" />
+    <Compile Include="Dossier\DlgAjoutDossier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dossier\DlgAjoutDossier.Designer.cs">
+      <DependentUpon>DlgAjoutDossier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dossier\DlgHistorique.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dossier\DlgHistorique.Designer.cs">
+      <DependentUpon>DlgHistorique.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dossier\Dossier.cs" />
+    <Compile Include="Dossier\DlgDestination.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dossier\DlgDestination.Designer.cs">
+      <DependentUpon>DlgDestination.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dossier\Statut.cs" />
+    <Compile Include="FormPrincipale.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPrincipale.designer.cs">
+      <DependentUpon>FormPrincipale.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Personnes\DlgAjoutPersonne.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Personnes\DlgAjoutPersonne.Designer.cs">
+      <DependentUpon>DlgAjoutPersonne.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Personnes\Personne.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Province.cs" />
+    <Compile Include="Rapport\DlgRapportAccident.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rapport\DlgRapportAccident.Designer.cs">
+      <DependentUpon>DlgRapportAccident.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Rapport\DlgRapportEnquete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rapport\DlgRapportEnquete.Designer.cs">
+      <DependentUpon>DlgRapportEnquete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Rapport\DlgRapportEvenement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rapport\DlgRapportEvenement.Designer.cs">
+      <DependentUpon>DlgRapportEvenement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Rapport\RapportAccident.cs" />
+    <Compile Include="Rapport\RapportEnquete.cs" />
+    <Compile Include="Rapport\RapportEvenement.cs" />
+    <Compile Include="RequetesSQL.cs" />
+    <Compile Include="Vehicule\DlgAjoutVehicule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Vehicule\DlgAjoutVehicule.Designer.cs">
+      <DependentUpon>DlgAjoutVehicule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vehicule\Vehicule.cs" />
+    <EmbeddedResource Include="Compte\DlgChoisirCompte.resx">
+      <DependentUpon>DlgChoisirCompte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compte\DlgCompte.resx">
+      <DependentUpon>DlgCompte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compte\DlgLogin.resx">
+      <DependentUpon>DlgLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compte\DlgReset.resx">
+      <DependentUpon>DlgReset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compte\DlgSaisieCompte.resx">
+      <DependentUpon>DlgSaisieCompte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dossier\DlgAjoutDossier.resx">
+      <DependentUpon>DlgAjoutDossier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dossier\DlgDestination.resx">
+      <DependentUpon>DlgDestination.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dossier\DlgHistorique.resx">
+      <DependentUpon>DlgHistorique.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPrincipale.resx">
+      <DependentUpon>FormPrincipale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Personnes\DlgAjoutPersonne.resx">
+      <DependentUpon>DlgAjoutPersonne.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Rapport\DlgRapportAccident.resx">
+      <DependentUpon>DlgRapportAccident.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rapport\DlgRapportEnquete.resx">
+      <DependentUpon>DlgRapportEnquete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rapport\DlgRapportEvenement.resx">
+      <DependentUpon>DlgRapportEvenement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vehicule\DlgAjoutVehicule.resx">
+      <DependentUpon>DlgAjoutVehicule.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
